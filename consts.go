@@ -45,9 +45,43 @@ go:
   - "1.10"
 `
 
-// standard package layout
-// ./<projectname>.go -> package <projectname>
-// ./<projectname>_test.go
-// ./cmd/
-// ./cmd/<projectname>/main.go -> package main
-// ./cmd/<projectname>/main_test.go
+// PACKAGEFILE contains the content of the package root file
+const PACKAGEFILE = `
+package [project]
+
+`
+
+// PACKAGEFILETEST contains the tests for the package root file
+const PACKAGEFILETEST = `
+package [project]
+
+import (
+    "testing"
+)
+
+func Test[project](t *testing.T) {
+    panic("not implemented")
+}
+`
+
+// CMDFILE contains the content of the package cmd file
+const CMDFILE = `
+package main
+
+func main() {
+
+}
+`
+
+// CMDFILETEST contains the tests for the package cmd file
+const CMDFILETEST = `
+package main
+
+import (
+    "testing"
+)
+
+func TestMain(t *testing.T) {
+  panic("not implemented")
+}
+`

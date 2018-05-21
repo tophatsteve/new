@@ -56,7 +56,12 @@ func main() {
 	writeFile(projectPath+"Gopkg.toml", GOPKG)
 	writeFile(projectPath+".travis.yml", TRAVIS)
 
-	// write project structure
+	writeFile(projectPath+replacer.replace(settings, "[project].go"), replacer.replace(settings, PACKAGEFILE))
+	writeFile(projectPath+replacer.replace(settings, "[project]_test.go"), replacer.replace(settings, PACKAGEFILETEST))
+
+	ensureFolder(projectPath + "cmd")
+	writeFile(projectPath+"cmd/main.go", replacer.replace(settings, CMDFILE))
+	writeFile(projectPath+"cmd/main_test.go", replacer.replace(settings, CMDFILETEST))
 }
 
 func usage() {
@@ -76,4 +81,10 @@ func writeFile(filename, content string) {
 	defer file.Close()
 
 	fmt.Fprintf(file, content)
+}
+
+func ensureFolder(folderName string) {
+	if _, err := os.Stat(folderName); os.IsNotExist(err) {
+		os.Mkdir(folderName, os.ModePerm)
+	}
 }
