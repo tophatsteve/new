@@ -10,10 +10,19 @@ import (
 // SourceFetcher implements the methods needed to fetch a files.
 type SourceFetcher interface {
 	fetchLicense(licenseName string) license
+	fetchLicenseList() []licenseSummary
 	fetchGitIgnore(language string) gitignore // /gitignore/templates/go
 }
 
 type githubSourceFetcher struct {
+}
+
+type licenseSummary struct {
+	Key    string `json:"key"`
+	Name   string `json:"name"`
+	SpdxID string `json:"spdx_id"`
+	URL    string `json:"url"`
+	NodeID string `json:"node_id"`
 }
 
 type license struct {
@@ -53,6 +62,25 @@ func (l githubSourceFetcher) fetchLicense(licenseName string) license {
 	}
 
 	return license
+}
+
+func (l githubSourceFetcher) fetchLicenseList() []licenseSummary {
+	url := "https://api.github.com/licenses"
+	body := fetchFromURL(url)
+
+	licenses := []licenseSummary{}
+
+	if body == nil {
+		return licenses
+	}
+
+	err := json.Unmarshal(body, &licenses)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return licenses
 }
 
 func (l githubSourceFetcher) fetchGitIgnore(language string) gitignore {

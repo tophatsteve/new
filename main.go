@@ -33,8 +33,6 @@ func main() {
 	projectName := flag.Args()[0]
 	projectPath := "./" + projectName + "/"
 
-	git.PlainInit(projectPath+".git", true)
-
 	settings := map[string]string{
 		"fullname": getUserName(),
 		"year":     time.Now().Local().Format("2006"),
@@ -44,9 +42,21 @@ func main() {
 	license := sourceFetcher.fetchLicense(strings.ToLower(*licenseName))
 
 	if license.Body == "" {
+		var licenses = sourceFetcher.fetchLicenseList()
 		fmt.Println("Could not find a license called", *licenseName)
+
+		if len(licenses) > 0 {
+			fmt.Println("\nAvailable licenses are:")
+			fmt.Println("")
+			for _, v := range licenses {
+				fmt.Printf("%-14s -  %s\n", v.Key, v.Name)
+			}
+		}
+
 		return
 	}
+
+	git.PlainInit(projectPath+".git", true)
 
 	gitignore := sourceFetcher.fetchGitIgnore("Go")
 
