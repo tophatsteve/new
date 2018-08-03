@@ -2,19 +2,26 @@ language: go
 go:
 - '1.10'
 - tip
+
+before_install:
+  - curl -L -s https://github.com/golang/dep/releases/download/v${DEP_VERSION}/dep-linux-amd64 -o $GOPATH/bin/dep
+  - chmod +x $GOPATH/bin/dep
+  - go get golang.org/x/tools/cmd/cover
+
 install:
-- go get -v github.com/golang/dep/cmd/dep
-- go get -v github.com/codeclimate/test-reporter
-- cd $GOPATH/src/github.com/golang/dep/cmd/dep && git checkout tags/v0.4.1 && go install
-- cd $GOPATH/src/github.com/codeclimate/test-reporter && git checkout tags/v0.4.3
-  && go install
-- cd - && dep ensure -v -vendor-only
+  - dep ensure
+
 before_script:
-- test-reporter before-build
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
-- go test -coverprofile c.out
+  - go test -coverprofile c.out ./...
+
 after_script:
-- test-reporter after-build --coverage-input-type gocov --exit-code $TRAVIS_TEST_RESULT
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
 env:
   global:
     secure: s4rsRe1f8TNESCp5sl9NiPGY29myqcI6Xo2hWr5QqPstu/+TEBJvdRJ7zo6c6Hmm25VXK3PJz3ahAGQjWdjLrk53uzFvHuELbyUVRHLxurZwheHc1alBSlsVbOqmhG16u3ccIai09B64zPCMAlltkVo9MfIkdGVtlsXCr7KJ9NAph2X9hRnU6YZIBq8Q9M1CJqrYv8kl75eo9IpbSnM2ggu1uRNVxpScskGFTRYPrOGYaGGoIvbJGvHfTSRRKM2n0bRZDK5o+ostVAKNYsy9edZSSulBSFrinmqdawvZQqKgF8mS4Ix+NuOjmbggbAER10ZeGpMa6Zjd7+FGMK6sKzi8QM22pUi2Cccv2Rms1wEybroVGSJm6GpxiR2NxshsszsQdHEedw7Lsnerr9Ci/t3nNUl9SVxM4CK/rX6v23XV3G3Loa7mlCudAI4PufbXW+jfiRWATUbul3MDIM1oQNsrnW2KcO5BfEqcqWAvGDVRcAXlmOW8M+yvQgoyvf8nLjj1xBhgVx/JSo092AHcEhaDptJHRgV82NsFIRjv88HLbVtQiLjRgVoqeMtcb8taCgxtAYQVxeeKRD+dn8iLxfmSIE1Cc+/iMIRupZQfhAG0qr0QYIu8x8Tum/3UnDxqLkK8cApgpr6BHNLWQ9sFhu6WZSpHYENfB+dkEJuFH28=
