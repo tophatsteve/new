@@ -1,6 +1,10 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=747206278eec620edf89a18fb4d4ecdcbe5393ce34ebcbb0fe100244436097bf
+    - DEP_VERSION="0.4.1"
+
 language: go
 go:
-- '1.10'
 - tip
 
 before_install:
@@ -22,6 +26,3 @@ script:
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
-env:
-  global:
-    secure: s4rsRe1f8TNESCp5sl9NiPGY29myqcI6Xo2hWr5QqPstu/+TEBJvdRJ7zo6c6Hmm25VXK3PJz3ahAGQjWdjLrk53uzFvHuELbyUVRHLxurZwheHc1alBSlsVbOqmhG16u3ccIai09B64zPCMAlltkVo9MfIkdGVtlsXCr7KJ9NAph2X9hRnU6YZIBq8Q9M1CJqrYv8kl75eo9IpbSnM2ggu1uRNVxpScskGFTRYPrOGYaGGoIvbJGvHfTSRRKM2n0bRZDK5o+ostVAKNYsy9edZSSulBSFrinmqdawvZQqKgF8mS4Ix+NuOjmbggbAER10ZeGpMa6Zjd7+FGMK6sKzi8QM22pUi2Cccv2Rms1wEybroVGSJm6GpxiR2NxshsszsQdHEedw7Lsnerr9Ci/t3nNUl9SVxM4CK/rX6v23XV3G3Loa7mlCudAI4PufbXW+jfiRWATUbul3MDIM1oQNsrnW2KcO5BfEqcqWAvGDVRcAXlmOW8M+yvQgoyvf8nLjj1xBhgVx/JSo092AHcEhaDptJHRgV82NsFIRjv88HLbVtQiLjRgVoqeMtcb8taCgxtAYQVxeeKRD+dn8iLxfmSIE1Cc+/iMIRupZQfhAG0qr0QYIu8x8Tum/3UnDxqLkK8cApgpr6BHNLWQ9sFhu6WZSpHYENfB+dkEJuFH28=
