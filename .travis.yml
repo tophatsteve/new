@@ -1,19 +1,15 @@
 env:
   global:
     - CC_TEST_REPORTER_ID=747206278eec620edf89a18fb4d4ecdcbe5393ce34ebcbb0fe100244436097bf
-    - DEP_VERSION="0.4.1"
+    - GO111MODULE=on
 
 language: go
 go:
-- tip
+- "1.11.x"
 
 before_install:
-  - curl -L -s https://github.com/golang/dep/releases/download/v${DEP_VERSION}/dep-linux-amd64 -o $GOPATH/bin/dep
-  - chmod +x $GOPATH/bin/dep
   - go get golang.org/x/tools/cmd/cover
 
-install:
-  - dep ensure
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -21,7 +17,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - go test -coverprofile c.out ./...
+  - go test -v -mod=vendor -coverprofile c.out ./...
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
